@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utilidade Pública</title>
+</head>
+<body>
+    <header>
+        <a href="../index.html">Voltar</a>
+    </header>
+
+    <h1>Consulta de Informações do Brasil</h1>
+
+    <div id="results">
+    </div>
+
+    <h2>Consultas via Formulário</h2>
+
+    <form onsubmit="handleSubmit(event, 'cep')">
+        <label for="cepInput">Consultar CEP:</label>
+        <input type="text" id="cepInput" name="cep" required>
+        <button type="submit">Consultar</button>
+    </form>
+
+    <form onsubmit="handleSubmit(event, 'cnpj')">
+        <label for="cnpjInput">Consultar CNPJ:</label>
+        <input type="text" id="cnpjInput" name="cnpj" required>
+        <button type="submit">Consultar</button>
+    </form>
+
+    <form onsubmit="handleSubmit(event, 'weather')">
+        <label for="cityCodeInput">Consultar Previsão do Tempo por Código da Cidade:</label>
+        <input type="text" id="cityCodeInput" name="cityCode" required>
+        <button type="submit">Consultar</button>
+    </form>
+
+    <script src="./script.js">
+       
+    </script>
+
+</body>
+</html>
