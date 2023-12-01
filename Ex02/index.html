@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
     <title>Utilidade Pública</title>
 </head>
 <body>
@@ -10,30 +11,56 @@
         <a href="../index.html">Voltar</a>
     </header>
 
-    <h1>Consulta de Informações do Brasil</h1>
+    <div id="exercise2" class="main-card">
+        <h1 class="section-title">Atividade 2</h1>
+        <div class="row">
+            <p>
+                Utilizando a API 'Buscar localidades' para encontrar a cidade de Rio Grande:
+            </p>
+            <p class="bold-text" id="part1Result"></p>
+        </div>
+        <div class="row">
+            <p>
+                Buscando as informações de um estado a partir da sigla:
+            </p>
+            <p class="bold-text" id="part2Result"></p>
+        </div>
+        <div class="row">
+            <p>
+                Buscando as informações de uma taxa a partir do seu nome:
+            </p>
+            <p class="bold-text" id="part3Result"></p>
+        </div>
+        <div>
+            <form>
+                <fieldset class="form-elements-position">
+                    <div class="inputs-position">
+                        <label class="input-label" for="zipcode">Informe o CEP:</label>
+                        <input class="input-style" type="text" id="zipcode" name="zipcode" placeholder="12.345-67"
+                            pattern="[0-9]{2}.[0-9]{3}-[0-9]{3}" maxlength="11" required onChange="searchZipCode()"><br>
+                            <button id="searchZipCodeButton">Consultar CEP</button>
+                            <div id="zipCodeResult" class="result-section"></div>
+                    </div>
+                    <div class="inputs-position">
+                        <label class="input-label" for="tax-id">Informe o CNPJ:</label>
+                        <input class="input-style" type="text" id="tax-id" name="tax-id" maxlength="14" required
+                            onChange="searchTaxId()"><br>
+                        <button id="searchTaxIdButton">Consultar CNPJ</button>
+                        <div id="taxIdResult" class="result-section"></div>
 
-    <div id="results">
+                    </div>
+                    <div class="inputs-position">
+                        <label class="input-label" for="area-code">Informe o DDD:</label>
+                        <input class="input-style" type="text" id="area-code" name="area-code" maxlength="2" required
+                            onChange="searchAreaCode()"><br>
+                        <button id="searchAreaCodeButton">Consultar DDD</button>
+                        <div id="areaCodeResult" class="result-section"></div>
+
+                    </div>
+                </fieldset>
+            </form>
+        </div>
     </div>
-
-    <h2>Consultas via Formulário</h2>
-
-    <form onsubmit="handleSubmit(event, 'cep')">
-        <label for="cepInput">Consultar CEP:</label>
-        <input type="text" id="cepInput" name="cep" required>
-        <button type="submit">Consultar</button>
-    </form>
-
-    <form onsubmit="handleSubmit(event, 'cnpj')">
-        <label for="cnpjInput">Consultar CNPJ:</label>
-        <input type="text" id="cnpjInput" name="cnpj" required>
-        <button type="submit">Consultar</button>
-    </form>
-
-    <form onsubmit="handleSubmit(event, 'weather')">
-        <label for="cityCodeInput">Consultar Previsão do Tempo por Código da Cidade:</label>
-        <input type="text" id="cityCodeInput" name="cityCode" required>
-        <button type="submit">Consultar</button>
-    </form>
 
     <script src="./script.js">
        

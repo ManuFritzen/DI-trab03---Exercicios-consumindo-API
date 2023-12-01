@@ -3,26 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exercicio 03</title>
+    <link rel="stylesheet" href="../style.css">
+    <title>Consulta Ipeadata</title>
 </head>
 <body>
     <header>
         <a href="../index.html">Voltar</a>
     </header>
 
-    <h1>Consulta Ipeadata</h1>
+    <div class="container">
+        <h1>Consulta Ipeadata</h1>
 
-    <label for="metadataSelect">Escolha o Tipo de Consulta:</label>
-    <select id="metadataSelect">
-        <option value="WDI_PPCTAXAC">Taxa de paridade do poder de compra (PPC) - Referência 2005</option>
-        <option value="WDI_PPCTAXAC2011">Taxa de paridade do poder de compra (PPC) - Referência 2011</option>
-        <option value="WDI_PPCTAXAC2017">Taxa de paridade do poder de compra (PPC) - Referência 2017</option>
-    </select>
+        <label for="metadataSelect">Escolha o Tipo de Consulta:</label>
+        <select id="metadataSelect" class="select-style">
+            <option value="WDI_PPCTAXAC">Taxa de paridade do poder de compra (PPC) - Referência 2005</option>
+            <option value="WDI_PPCTAXAC2011">Taxa de paridade do poder de compra (PPC) - Referência 2011</option>
+            <option value="WDI_PPCTAXAC2017">Taxa de paridade do poder de compra (PPC) - Referência 2017</option>
+        </select>
 
-    <button onclick="fetchData()">Consultar</button>
-    <button onclick="showTable()">Mostrar Tabela</button>
+        <button id="fetchButton" class="button-style" onclick="fetchData()">Consultar</button>
+        <button id="showTableButton" class="button-style" onclick="showTable()">Mostrar Tabela</button>
 
-    <div id="result"></div>
+        <div id="result" class="result-container"></div>
+    </div>
 
     <script src="script.js"></script>
 </body>

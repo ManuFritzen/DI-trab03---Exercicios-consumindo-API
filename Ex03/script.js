@@ -1,3 +1,6 @@
+document.getElementById("fetchButton").addEventListener("click", fetchData);
+document.getElementById("showTableButton").addEventListener("click", showTable);
+
 let selectedOption;
 let responseData;
 
@@ -49,6 +52,8 @@ function displayData(data, selectedOption) {
 
     if (data.value && data.value.length > 0) {
         const table = document.createElement('table');
+        table.className = 'table-style';
+
         const headerRow = table.createTHead().insertRow(0);
 
         const columnNames = Object.keys(data.value[0]);

@@ -1,38 +1,139 @@
-const apiUrl = 'https://brasilapi.com.br/api/';
+const getElement = (id) => document.getElementById(id);
+const fetchAndDisplay = async (url, elementId, errorMessage, dataProcessor) => {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        dataProcessor(data, elementId);
+    } catch (error) {
+        alert(errorMessage);
+        console.error(error);
+    }
+};
+const displayResult = (data, elementId) => {
+    const element = getElement(elementId);
+    element.innerHTML = JSON.stringify(data, null, 2);
+};
 
-function displayResults(results) {
-    const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = JSON.stringify(results, null, 2);
-}
+// Botão para consultar CEP
+getElement("searchZipCodeButton").addEventListener("click", () => {
+    const zipCode = getElement("zipcode").value;
+    const url = `https://brasilapi.com.br/api/cep/v1/${zipCode}`;
+    fetchAndDisplay(url, "zipCodeResult", "CEP não encontrado", displayResult);
+});
 
-function getRandomCep() {
-    fetch(apiUrl + 'cep/v2') 
-        .then(response => response.json())
-        .then(data => displayResults(data))
-        .catch(error => console.error('Erro ao obter CEP aleatório:', error));
-}
+// Botão para consultar CNPJ
+getElement("searchTaxIdButton").addEventListener("click", () => {
+    const taxId = getElement("tax-id").value;
+    const url = `https://brasilapi.com.br/api/cnpj/v1/${taxId}`;
+    fetchAndDisplay(url, "taxIdResult", "CNPJ não encontrado", displayResult);
+});
 
-function getRandomCnpj() {
-    fetch(apiUrl + 'cnpj/v1')
-        .then(response => response.json())
-        .then(data => displayResults(data))
-        .catch(error => console.error('Erro ao obter CNPJ aleatório:', error));
-}
+// Botão para consultar DDD
+getElement("searchAreaCodeButton").addEventListener("click", () => {
+    const areaCode = getElement("area-code").value;
+    const url = `https://brasilapi.com.br/api/ddd/v1/${areaCode}`;
+    fetchAndDisplay(url, "areaCodeResult", "DDD não encontrado", displayResult);
+});
 
-function getRandomWeather() {
-    fetch(apiUrl + 'cptec/v1/clima/previsao')
-        .then(response => response.json())
-        .then(data => displayResults(data))
-        .catch(error => console.error('Erro ao obter previsão do tempo aleatória:', error));
-}
+fetchAndDisplay("https://brasilapi.com.br/api/cptec/v1/cidade/rio%20grande", "part1Result", "Cidade não encontrada", (cities, elementId) => {
+    const city = cities.find(c => c.estado === "RS" && c.nome === "Rio Grande");
+    if (city) getElement(elementId).innerHTML = `${city.nome}-${city.estado}`;
+});
 
-function handleSubmit(event, endpoint) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const queryParam = formData.get(formData.keys().next().value);
+fetchAndDisplay("https://brasilapi.com.br/api/ibge/uf/v1/mg", "part2Result", "Estado não encontrado", (stateInfo, elementId) => {
+    const { nome, sigla, regiao: { nome: regiaoNome, sigla: regiaoSigla } } = stateInfo;
+    getElement(elementId).innerHTML = `${nome}-${sigla}, ${regiaoNome}-${regiaoSigla}`;
+});
 
-    fetch(apiUrl + endpoint + '/v1/' + queryParam)
-        .then(response => response.json())
-        .then(data => displayResults(data))
-        .catch(error => console.error(`Erro ao obter dados para ${endpoint}:`, error));
-}
+fetchAndDisplay("https://brasilapi.com.br/api/taxas/v1/cdi", "part3Result", "Taxa não encontrada", (cdiValue, elementId) => {
+    const { nome, valor } = cdiValue;
+    getElement(elementId).innerHTML = `${nome} - ${valor}`;
+});
+
+const fetchDataAndValidate = async (inputId, url, dataProcessor, validSetter) => {
+    const inputValue = getElement(inputId).value;
+    const fullUrl = `https://brasilapi.com.br/api/${url}/${inputValue}`;
+    try {
+        const response = await fetch(fullUrl);
+        const responseData = await response.json();
+        validSetter(responseData.message === undefined || responseData.message === null);
+        dataProcessor(responseData);
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+const searchZipCode = () => fetchDataAndValidate("zipcode", "cep/v1", (zipCodeResponse) => {
+    // Process zip code response
+}, (valid) => zipCodeValid = valid);
+
+const searchTaxId = () => fetchDataAndValidate("tax-id", "cnpj/v1", (taxIdResponse) => {
+    // Process tax ID response
+}, (valid) => taxIdValid = valid);
+
+const searchAreaCode = () => fetchDataAndValidate("area-code", "ddd/v1", (areaCodeResponse) => {
+    // Process area code response
+}, (valid) => areaCodeValid = valid);
+
+const createFormResponse = () => {
+    const div = getElement("exercise2");
+    const divResponse = document.createElement("div");
+    divResponse.className = "form-response";
+    divResponse.id = "formResponse";
+
+    const addInfoSection = (title, data) => {
+        const sectionTitle = document.createElement("h2");
+        sectionTitle.innerText = title;
+        sectionTitle.className = "lateral-padding";
+        divResponse.appendChild(sectionTitle);
+
+        for (const [key, value] of Object.entries(data)) {
+            const infoParagraph = document.createElement("p");
+            infoParagraph.innerText = `${key}: ${value}`;
+            divResponse.appendChild(infoParagraph);
+        }
+    };
+
+    // Informações do CEP
+    addInfoSection("Informações do CEP", {
+        "Cidade": zipCodeResponse.city,
+        "Estado": zipCodeResponse.state,
+        "Endereço": zipCodeResponse.street,
+        "Bairro": zipCodeResponse.neighborhood
+    });
+
+    const addLineBreak = () => {
+        const lineBreak = document.createElement("br");
+        divResponse.appendChild(lineBreak);
+    };
+
+    // Informações do CNPJ
+    addLineBreak();
+    addInfoSection("Informações do CNPJ", {
+        "Localidade": `${taxIdResponse.municipio}-${taxIdResponse.uf}`,
+        "Nome Fantasia": taxIdResponse.nome_fantasia,
+        "Descrição fiscal": taxIdResponse.cnae_fiscal_descricao,
+        "Início das atividades em": formatDate(taxIdResponse.data_inicio_atividade)
+    });
+
+    // Cidades do DDD
+    addLineBreak();
+    addInfoSection(`Cidades do ${dddResposta.state} com DDD ${getElement("area-code").value}`, {
+        "Lista de Cidades": dddResposta.cities.join(", ")
+    });
+
+    div.appendChild(divResponse);
+};
+
+getElement("formButton").disabled = true;
+getElement("formButton").addEventListener("click", () => {
+    const formResponse = getElement("formResponse");
+    if (formResponse) formResponse.remove();
+    createFormResponse();
+});
+
+const validateFormResponses = () => {
+    getElement("formButton").disabled = !(zipCodeValid && taxIdValid && areaCodeValid);
+};
+
+const formatDate = (date) => date.slice(8, 10) + "-" + date.slice(5, 7) + "-" + date.slice(0, 4);
