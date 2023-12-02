@@ -1,7 +1,5 @@
- // Caminho relativo para o arquivo JSON local
  const jsonPath = '../paises.json';
 
- // Função para obter e exibir os dados do país selecionado
  function getCountryData() {
      const select = document.getElementById('countries');
      const selectedCountryName = select.value;
@@ -12,10 +10,8 @@
              const selectedCountry = data.find(country => country.nome_pais === selectedCountryName);
              const countryDataDiv = document.getElementById('countryData');
              
-             // Limpar dados anteriores
              countryDataDiv.innerHTML = '';
 
-             // Exibir os dados do país selecionado
              for (const key in selectedCountry) {
                  const p = document.createElement('p');
                  p.innerHTML = `<strong>${key}:</strong> ${selectedCountry[key]}`;
@@ -26,7 +22,6 @@
  }
 
  document.addEventListener('DOMContentLoaded', function () {
-     // Função para buscar e preencher o select com os países
      function fetchCountries() {
          fetch(jsonPath)
              .then(response => response.json())
@@ -42,6 +37,5 @@
              .catch(error => console.error('Erro ao buscar países:', error));
      }
 
-     // Chamar a função para preencher o select quando a página carregar
      fetchCountries();
  });

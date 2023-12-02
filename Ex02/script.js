@@ -14,21 +14,18 @@ const displayResult = (data, elementId) => {
     element.innerHTML = JSON.stringify(data, null, 2);
 };
 
-// Botão para consultar CEP
 getElement("searchZipCodeButton").addEventListener("click", () => {
     const zipCode = getElement("zipcode").value;
     const url = `https://brasilapi.com.br/api/cep/v1/${zipCode}`;
     fetchAndDisplay(url, "zipCodeResult", "CEP não encontrado", displayResult);
 });
 
-// Botão para consultar CNPJ
 getElement("searchTaxIdButton").addEventListener("click", () => {
     const taxId = getElement("tax-id").value;
     const url = `https://brasilapi.com.br/api/cnpj/v1/${taxId}`;
     fetchAndDisplay(url, "taxIdResult", "CNPJ não encontrado", displayResult);
 });
 
-// Botão para consultar DDD
 getElement("searchAreaCodeButton").addEventListener("click", () => {
     const areaCode = getElement("area-code").value;
     const url = `https://brasilapi.com.br/api/ddd/v1/${areaCode}`;
@@ -64,15 +61,15 @@ const fetchDataAndValidate = async (inputId, url, dataProcessor, validSetter) =>
 };
 
 const searchZipCode = () => fetchDataAndValidate("zipcode", "cep/v1", (zipCodeResponse) => {
-    // Process zip code response
+    
 }, (valid) => zipCodeValid = valid);
 
 const searchTaxId = () => fetchDataAndValidate("tax-id", "cnpj/v1", (taxIdResponse) => {
-    // Process tax ID response
+    
 }, (valid) => taxIdValid = valid);
 
 const searchAreaCode = () => fetchDataAndValidate("area-code", "ddd/v1", (areaCodeResponse) => {
-    // Process area code response
+    
 }, (valid) => areaCodeValid = valid);
 
 const createFormResponse = () => {
@@ -94,34 +91,7 @@ const createFormResponse = () => {
         }
     };
 
-    // Informações do CEP
-    addInfoSection("Informações do CEP", {
-        "Cidade": zipCodeResponse.city,
-        "Estado": zipCodeResponse.state,
-        "Endereço": zipCodeResponse.street,
-        "Bairro": zipCodeResponse.neighborhood
-    });
-
-    const addLineBreak = () => {
-        const lineBreak = document.createElement("br");
-        divResponse.appendChild(lineBreak);
-    };
-
-    // Informações do CNPJ
-    addLineBreak();
-    addInfoSection("Informações do CNPJ", {
-        "Localidade": `${taxIdResponse.municipio}-${taxIdResponse.uf}`,
-        "Nome Fantasia": taxIdResponse.nome_fantasia,
-        "Descrição fiscal": taxIdResponse.cnae_fiscal_descricao,
-        "Início das atividades em": formatDate(taxIdResponse.data_inicio_atividade)
-    });
-
-    // Cidades do DDD
-    addLineBreak();
-    addInfoSection(`Cidades do ${dddResposta.state} com DDD ${getElement("area-code").value}`, {
-        "Lista de Cidades": dddResposta.cities.join(", ")
-    });
-
+    
     div.appendChild(divResponse);
 };
 

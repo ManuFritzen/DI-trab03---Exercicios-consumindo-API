@@ -1,6 +1,6 @@
-const firstApiUrl = `http://www.ipeadata.gov.br/api/odata4/Metadados('WDI_PPCTAXAC')`;
-const secondApiUrl = `http://www.ipeadata.gov.br/api/odata4/Metadados('WDI_PPCTAXAC2011')`;
-const thirdApiUrl = `http://www.ipeadata.gov.br/api/odata4/Metadados('WDI_PPCTAXAC2017')`;
+const firstApiUrl = `http://www.ipeadata.gov.br/api/odata4/Metadados('ABATE_ABPEAV')`;
+const secondApiUrl = `http://www.ipeadata.gov.br/api/odata4/Metadados('CNI4_CPCOQUE4')`;
+const thirdApiUrl = `http://www.ipeadata.gov.br/api/odata4/Metadados('BPAG12_SERINTR12')`;
 
 document.getElementById('btnPromiseAny').addEventListener('click', async () => {
     const apiUrls = [firstApiUrl, secondApiUrl, thirdApiUrl];
